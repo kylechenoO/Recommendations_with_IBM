@@ -13331,16 +13331,16 @@ The 3 most similar users to user 46 are: [4201, 23, 3782]
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;common excel tasks demonstrated in\xa0pandas&#39;,
- &#39;use spark for r to load data and run sql queries&#39;,
- &#39;agriculture, value added (% of gdp) by country&#39;,
- &#39;adoption of machine learning to software failure prediction&#39;,
- &#39;airbnb data for analytics: portland calendar&#39;,
- &#39;spark 2.1 and job monitoring available in dsx&#39;,
- &#39;what is smote in an imbalanced class setting (e.g. fraud detection)?&#39;,
- &#39;improving the roi of big data and analytics through leveraging new sources of data&#39;,
- &#39;airbnb data for analytics: brussels reviews&#39;,
- &#39;country statistics: crude oil - imports&#39;]</pre>
+<pre>[&#39;web picks - dataminingapps&#39;,
+ &#39;breast cancer wisconsin (diagnostic) data set&#39;,
+ &#39;health insurance (2015): united states demographic measures&#39;,
+ &#39;finding the user in data science&#39;,
+ &#39;airbnb data for analytics: seattle reviews&#39;,
+ &#39;laplace noising versus simulated out of sample methods (cross frames)&#39;,
+ &#39;run dsx notebooks on amazon emr&#39;,
+ &#39;56594    lifelong (machine) learning: how automation ca...\nName: title, dtype: object&#39;,
+ &#39;working with ibm cloud object storage in r&#39;,
+ &#39;refugees&#39;]</pre>
 </div>
 
 </div>
@@ -14595,7 +14595,7 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[69]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">40000</span><span class="p">)</span>
@@ -14617,13 +14617,28 @@ The top 10 recommendations for user 20 are the following article names:
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Your code here</span>
+    <span class="c1">## user_item_train = create_user_item_matrix(df_train)</span>
+    <span class="c1">## user_item_test = create_user_item_matrix(df_test)</span>
+    <span class="c1">## test_idx = user_item_test.index.values.tolist()</span>
+    <span class="c1">## test_arts = user_item_test.columns.values.tolist()</span>
+    
+    <span class="c1">## exp_list = [ u for u in user_item_test.index.values.tolist() if u in user_item_train.index.values.tolist() ]</span>
+    <span class="c1">## user_item_test.drop(exp_list, inplace = True)</span>
+    
     <span class="n">user_item_train</span> <span class="o">=</span> <span class="n">create_user_item_matrix</span><span class="p">(</span><span class="n">df_train</span><span class="p">)</span>
     <span class="n">user_item_test</span> <span class="o">=</span> <span class="n">create_user_item_matrix</span><span class="p">(</span><span class="n">df_test</span><span class="p">)</span>
-    <span class="n">test_idx</span> <span class="o">=</span> <span class="n">user_item_test</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">test_arts</span> <span class="o">=</span> <span class="n">user_item_test</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    
-    <span class="n">exp_list</span> <span class="o">=</span> <span class="p">[</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">user_item_test</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">if</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">user_item_train</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="p">]</span>
-    <span class="n">user_item_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">exp_list</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># which rows can we use in test?</span>
+    <span class="n">train_idx</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">user_item_train</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">test_idx</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">user_item_test</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">match_idx</span> <span class="o">=</span> <span class="n">train_idx</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">test_idx</span><span class="p">)</span>
+
+    <span class="c1"># which columns can we use in test?</span>
+    <span class="n">train_arts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">user_item_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">test_arts</span> <span class="o">=</span>  <span class="nb">set</span><span class="p">(</span><span class="n">user_item_test</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">match_cols</span> <span class="o">=</span> <span class="n">train_arts</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">test_arts</span><span class="p">)</span>
+
+    <span class="n">user_item_test</span> <span class="o">=</span> <span class="n">user_item_test</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">match_idx</span><span class="p">,</span> <span class="n">match_cols</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">user_item_train</span><span class="p">,</span> <span class="n">user_item_test</span><span class="p">,</span> <span class="n">test_idx</span><span class="p">,</span> <span class="n">test_arts</span>
 
@@ -14634,10 +14649,34 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/usr/local/lib/python3.5/dist-packages/ipykernel_launcher.py:41: DeprecationWarning: 
+.ix is deprecated. Please use
+.loc for label based indexing or
+.iloc for positional indexing
+
+See the documentation here:
+http://pandas.pydata.org/pandas-docs/stable/indexing.html#ix-indexer-is-deprecated
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_idx</span><span class="p">)</span> <span class="o">-</span> <span class="n">user_item_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -14660,9 +14699,9 @@ The top 10 recommendations for user 20 are the following article names:
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>20
+<pre>662
 574
-662
+20
 0
 </pre>
 </div>
@@ -14674,7 +14713,7 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[71]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Replace the values in the dictionary below</span>
@@ -14729,7 +14768,7 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">user_item_train</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -14745,7 +14784,7 @@ The top 10 recommendations for user 20 are the following article names:
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[46]:</div>
+<div class="prompt output_prompt">Out[72]:</div>
 
 
 
@@ -14926,7 +14965,7 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[66]:</div>
+<div class="prompt input_prompt">In&nbsp;[73]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># fit SVD on the user_item_train matrix</span>
@@ -14940,7 +14979,7 @@ The top 10 recommendations for user 20 are the following article names:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="prompt input_prompt">In&nbsp;[84]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Use these cells to see how well you can use the training </span>
@@ -14957,18 +14996,16 @@ The top 10 recommendations for user 20 are the following article names:
     <span class="n">user_item_est</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u_new</span><span class="p">,</span> <span class="n">s_new</span><span class="p">),</span> <span class="n">vt_new</span><span class="p">))</span>
     
     <span class="c1"># compute error for each prediction to actual value</span>
-    <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">user_item_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">user_item_est</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">))</span>
+    <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">user_item_train</span><span class="p">,</span> <span class="n">user_item_est</span><span class="p">)</span>
     
     <span class="c1"># total errors and keep track of them</span>
     <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diffs</span><span class="p">)))</span>
     <span class="n">sum_errs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-    
-<span class="nb">print</span><span class="p">(</span><span class="n">user_item_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    
+
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">num_latent_feats</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sum_errs</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">user_item_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">user_item_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of Latent Features&#39;</span><span class="p">);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">);</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Accuracy vs. Number of Latent Features&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of Latent Features&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Accuracy vs. Number of Latent Features&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -14984,27 +15021,16 @@ The top 10 recommendations for user 20 are the following article names:
 <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>(4487, 714)
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
 <div class="output_subarea output_text output_error">
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-64-083ee091d9c0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     21</span> print<span class="ansi-blue-fg">(</span>user_item_train<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     22</span> 
-<span class="ansi-green-fg">---&gt; 23</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>num_latent_feats<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">1</span> <span class="ansi-blue-fg">-</span> np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>sum_errs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">/</span>user_item_train<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     24</span> plt<span class="ansi-blue-fg">.</span>xlabel<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Number of Latent Features&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>
-<span class="ansi-green-intense-fg ansi-bold">     25</span> plt<span class="ansi-blue-fg">.</span>ylabel<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Accuracy&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>
+<span class="ansi-green-fg">&lt;ipython-input-84-f3f81c0b9f81&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     19</span>     sum_errs<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     20</span> 
+<span class="ansi-green-fg">---&gt; 21</span><span class="ansi-red-fg"> </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>num_latent_feats<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">1</span> <span class="ansi-blue-fg">-</span> np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span>sum_errs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">/</span><span class="ansi-blue-fg">(</span>user_item_train<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">*</span>user_item_test<span class="ansi-blue-fg">.</span>shape<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     22</span> plt<span class="ansi-blue-fg">.</span>xlabel<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Number of Latent Features&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     23</span> plt<span class="ansi-blue-fg">.</span>ylabel<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Accuracy&#39;</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-green-fg">/usr/local/lib/python3.5/dist-packages/matplotlib/pyplot.py</span> in <span class="ansi-cyan-fg">plot</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
 <span class="ansi-green-intense-fg ansi-bold">   3356</span>                       mplDeprecation)
@@ -15048,7 +15074,7 @@ The top 10 recommendations for user 20 are the following article names:
 </span><span class="ansi-green-intense-fg ansi-bold">    243</span>         <span class="ansi-green-fg">if</span> x<span class="ansi-blue-fg">.</span>ndim <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">2</span> <span class="ansi-green-fg">or</span> y<span class="ansi-blue-fg">.</span>ndim <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">:</span>
 <span class="ansi-green-intense-fg ansi-bold">    244</span>             raise ValueError(&#34;x and y can be no greater than 2-D, but have &#34;
 
-<span class="ansi-red-fg">ValueError</span>: x and y must have same first dimension, but have shapes (35,) and (560,)</pre>
+<span class="ansi-red-fg">ValueError</span>: x and y must have same first dimension, but have shapes (35,) and (980,)</pre>
 </div>
 </div>
 
